@@ -23,8 +23,6 @@ public class ManagerController {
         controllers.put(Medico.class, new MedicoController(new MedicoInternalRepository()));
         controllers.put(Paciente.class, new PacienteController(new PacienteInternalRepository()));
         controllers.put(CitaMedica.class, new CitaMedicaController(new CitaMedicaInternalRepository()));
-
-        
     }
 
     

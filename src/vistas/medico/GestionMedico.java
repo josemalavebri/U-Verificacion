@@ -15,6 +15,8 @@ public class GestionMedico extends javax.swing.JFrame {
      */
     public GestionMedico() {
         initComponents();
+        
+        
     }
 
     /**

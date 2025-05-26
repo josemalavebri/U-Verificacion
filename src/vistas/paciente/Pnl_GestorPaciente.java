@@ -10,8 +10,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelos.Paciente;
 import utilidades.AccesoController;
-import utilidades.ButtonEditor;
-import utilidades.ButtonRenderer;
+import utilidades.Table.ButtonTable.ButtonEditor;
+import utilidades.Table.ButtonTable.ButtonRenderer;
 import utilidades.ManagerController;
 
 public class Pnl_GestorPaciente extends javax.swing.JPanel {
@@ -242,6 +242,7 @@ public class Pnl_GestorPaciente extends javax.swing.JPanel {
         };
         return modificarAction;
     }
+    
     private Paciente buscarPaciente(int id, JTable tabla){
         for(Paciente paciente: datosPaciente){
             if(id == paciente.getId()){

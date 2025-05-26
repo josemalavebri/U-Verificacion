@@ -13,10 +13,10 @@ import modelos.Turno;
 
 import utilidades.AccesoController;
 import utilidades.ManagerController;
-import utilidades.TableColumns;
+import utilidades.Table.TableColumns;
 import utilidades.Verificador.VerificadorDeFormato;
 
-import vista.Factura.JF_Factura;
+import vistas.Factura.JF_Factura;
 
 public class JF_NuevaCitaMedica extends javax.swing.JFrame {
     private Turno turnoSeleccionado;
@@ -48,7 +48,8 @@ public class JF_NuevaCitaMedica extends javax.swing.JFrame {
     private void mostrarTurnosEnTabla() {
         turnosDisponibles = managerController.get(Turno.class);
         Turno turnoModelo = turnosDisponibles.get(1);
-        DefaultTableModel modeloTabla = TableColumns.CrearColumnasModelo(turnoModelo);
+        TableColumns tableColumns = new TableColumns();
+        DefaultTableModel modeloTabla = tableColumns.CrearColumnasModelo(turnoModelo);
         for (Turno t : turnosDisponibles) {
             Object[] fila = {t.getId(), t.getFecha(), t.getHora(), t.getMinuto()};
             modeloTabla.addRow(fila);

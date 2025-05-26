@@ -122,9 +122,9 @@ public class InternalBD {
         return false;
     }
 
-    public boolean removeMedico(Medico me){
+    public boolean removeMedico(int id){
         try {
-            return listaMedicos.removeIf(m -> m.getId() == me.getId());
+            return listaMedicos.removeIf(m -> m.getId() == id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -178,9 +178,9 @@ public class InternalBD {
         return false;
     }
 
-    public boolean removeCitaMedica(CitaMedica cita) {
+    public boolean removeCitaMedica(int id) {
         try {
-            return listaCitasMedicas.removeIf(c -> c.getId() == cita.getId());
+            return listaCitasMedicas.removeIf(c -> c.getId() == id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -263,9 +263,9 @@ public class InternalBD {
         return false;
     }
 
-    public boolean removePaciente(Paciente paciente){
+    public boolean removePaciente(int id){
         try {
-            return listaPacientes.removeIf(p -> p.getId() == paciente.getId());
+            return listaPacientes.removeIf(p -> p.getId() == id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

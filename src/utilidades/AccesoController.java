@@ -1,7 +1,6 @@
 
 package utilidades;
 
-import Data.InternalDB.Repository.MedicoInternalRepository;
 import Data.InternalDB.Repository.PacienteInternalRepository;
     import Data.IRepository;
 import controladores.*;
@@ -12,12 +11,12 @@ import controladores.*;
 
 public class AccesoController {
   
-    private IGeneralController medicoController;
-    private IGeneralController pacienteController;
+    private final IGeneralController medicoController;
+    private final IGeneralController pacienteController;
     private IGeneralController turnoController;
     private IGeneralController citaMedicaController;
     private IGeneralController facturaController;
-    private IRepository repository;
+    private final IRepository repository;
     
     public AccesoController(){
         repository = new PacienteInternalRepository();

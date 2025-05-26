@@ -11,4 +11,5 @@ public class PacienteController extends GeneralController<Paciente>{
         super(repository);
     }
     
+    
 }

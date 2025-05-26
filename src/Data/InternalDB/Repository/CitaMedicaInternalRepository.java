@@ -28,8 +28,8 @@ public class CitaMedicaInternalRepository extends GenericInternalRepository<Cita
     }
 
     @Override
-    public boolean remove(CitaMedica p) {
-        return internalBD.removeCitaMedica(p);   
+    public boolean remove(int id) {
+        return internalBD.removeCitaMedica(id);   
     }
     
     @Override

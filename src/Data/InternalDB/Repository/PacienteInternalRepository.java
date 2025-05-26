@@ -27,8 +27,8 @@ public class PacienteInternalRepository extends GenericInternalRepository<Pacien
     }
 
     @Override
-    public boolean remove(Paciente p) {
-        return internalBD.removePaciente(p);   
+    public boolean remove(int id) {
+        return internalBD.removePaciente(id);   
     }
     
     @Override

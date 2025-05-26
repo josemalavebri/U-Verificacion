@@ -1,101 +1,46 @@
 package vistas.citasMedicas;
 
-import controladores.CitaMedicaController;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import modelos.CitaMedica;
 import utilidades.AccesoController;
-import utilidades.ButtonEditor;
-import utilidades.ButtonRenderer;
+import utilidades.Table.CreateTableFinal;
 import utilidades.ManagerController;
 
 public class Pnl_CitaMedica extends javax.swing.JPanel {
 
     private ManagerController managerController;
-    private ArrayList<CitaMedica> citasMedicas ;
-    private DefaultTableModel modeloTabla;
+    private CreateTableFinal<CitaMedica> createTableFinal;
 
     public Pnl_CitaMedica(AccesoController accesoController) {
         initComponents();
         managerController = new ManagerController();
+        createTableFinal = new CreateTableFinal(managerController);
+        crearTodaTablaConDatos();
+    }
+    
+    private void crearTodaTablaConDatos(){
         crearModeloTablaCitaMedica();
-        cargarDatosCitaMedica();
-        asignarEventosBotones();
+        crearTableConEventoEliminar();
+        crearTableConEventoModificar();
     }
     
-    public void crearModeloTablaCitaMedica(){
-        modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("Id");
-        modeloTabla.addColumn("Paciente");
-        modeloTabla.addColumn("Médico");
-        modeloTabla.addColumn("Turno");
-        modeloTabla.addColumn("Modificar");
-        modeloTabla.addColumn("Eliminar");
+    private void crearModeloTablaCitaMedica(){
+        createTableFinal.tableModelTotal(tb_citasMedicas,CitaMedica.class);
     }
     
-    public void asignarEventoModificar(ActionListener modificarAction){
-        tb_citasMedicas.getColumn("Modificar").setCellRenderer(new ButtonRenderer());
-        tb_citasMedicas.getColumn("Modificar").setCellEditor(new ButtonEditor(new JCheckBox(), "Modificar", modificarAction));
-    }
-    
-    public void asignarEventoEliminar(ActionListener eliminarAction){
-        tb_citasMedicas.getColumn("Eliminar").setCellRenderer(new ButtonRenderer());
-        tb_citasMedicas.getColumn("Eliminar").setCellEditor(new ButtonEditor(new JCheckBox(), "Eliminar", eliminarAction));
-    }
-    
-    private void asignarEventosBotones(){
-        ActionListener listenerEliminar = crearEventoEliminar();
-        asignarEventoEliminar(listenerEliminar);
-        ActionListener listenerModificar = crearEventoModificar();
-        asignarEventoModificar(listenerModificar);
-    }
-    
-    private ActionListener crearEventoEliminar(){
-        ActionListener eventoEliminar = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = tb_citasMedicas.getSelectedRow();
-                int idTablaCitaMedica = (int) tb_citasMedicas.getValueAt(filaSeleccionada, 0);
-                boolean eliminado = managerController.remove(idTablaCitaMedica);
-                if(eliminado){
-                    JOptionPane.showMessageDialog(null, "Se eliminó el paciente con ID: " + idTablaCitaMedica);
-                    cargarDatosCitaMedica();
-                }
-            }
-        };
-        return eventoEliminar;
+    private void crearTableConEventoEliminar(){
+        createTableFinal.asignarEventoEliminarTabla(tb_citasMedicas, managerController,CitaMedica.class);
     }
     
     
-    
-    public ActionListener crearEventoModificar(){
-        ActionListener modificarAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = tb_citasMedicas.getSelectedRow();
-                if (filaSeleccionada >= 0) {
-                    int id = (int) tb_citasMedicas.getValueAt(filaSeleccionada, 0);
-                    for(CitaMedica citaMedica : citasMedicas){
-                        if(citaMedica.getId() == id){
-                            JF_NuevaCitaMedica citaMedicaModificar = new JF_NuevaCitaMedica();
-                            citaMedicaModificar.setCitaMedicaModificar(citaMedica);
-                            citaMedicaModificar.setVisible(true);
-                            citaMedicaModificar.setLocationRelativeTo(null);
-                            break;
-                        }
-                    }
-                }
-            }
-        };
-        return modificarAction;
+    private void crearTableConEventoModificar(){
+        createTableFinal.asignarEventoModificar(tb_citasMedicas, CitaMedica.class, citaMedica -> {
+            JF_NuevaCitaMedica panel = new JF_NuevaCitaMedica();
+            panel.setCitaMedicaModificar(citaMedica); 
+        });
     }
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -162,20 +107,6 @@ public class Pnl_CitaMedica extends javax.swing.JPanel {
        jframe.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
     
-    private void cargarDatosCitaMedica() {
-        DefaultTableModel modelo = (DefaultTableModel) tb_citasMedicas.getModel();
-        modelo.setRowCount(0);
-        citasMedicas = managerController.get(CitaMedica.class);
-        for (CitaMedica c : citasMedicas) {
-            Object[] fila = {c.getId(), c.getPaciente().getNombre(), c.getMedico().getNombre(),c.getTurno().getFecha()};
-            
-            modeloTabla.addRow(fila);
-        }
-        JTable tabla = new JTable(modeloTabla);
-        tb_citasMedicas.setModel(tabla.getModel());
-    }
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

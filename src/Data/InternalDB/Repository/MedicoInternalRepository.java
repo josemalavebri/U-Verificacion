@@ -34,8 +34,8 @@ public class MedicoInternalRepository extends GenericInternalRepository<Medico>{
     }
 
     @Override
-    public boolean remove(Medico entity) {
-        return internalBD.removeMedico(entity);
+    public boolean remove(int id) {
+        return internalBD.removeMedico(id);
     }
 
     

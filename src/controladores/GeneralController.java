@@ -28,8 +28,8 @@ public abstract class GeneralController<T> implements IGeneralController<T>{
     }
 
     @Override
-    public boolean remove(T objecto) {
-        return db.remove(objecto);
+    public boolean remove(int id) {
+        return db.remove(id);
     }
 
     @Override

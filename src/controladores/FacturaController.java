@@ -18,4 +18,8 @@ public class FacturaController extends GeneralController<Factura>{
     
     
     
+    
+    
+    
+    
 }

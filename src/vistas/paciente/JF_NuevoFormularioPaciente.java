@@ -1,16 +1,16 @@
 package vistas.paciente;
 
 import modelos.Paciente;
-import utilidades.Verificador.TipoValidacion;
-import utilidades.Verificador.Verificador;
+import utilidades.Validador.TipoValidacion;
+import utilidades.Validador.ValidadorDeCampos;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import utilidades.AccesoController;
+import utilidades.Controller.AccesoController;
 
 public class JF_NuevoFormularioPaciente extends javax.swing.JFrame {
 
     private Pnl_GestorPaciente panelPadre;
-    private Verificador verificador;
+    private ValidadorDeCampos verificador;
     private Paciente paciente;
     private AccesoController accesoController;
     
@@ -25,7 +25,7 @@ public class JF_NuevoFormularioPaciente extends javax.swing.JFrame {
     }
 
     private void inicializarDatos(){
-        verificador = new Verificador();
+        verificador = new ValidadorDeCampos();
 
     }
     
@@ -241,11 +241,11 @@ public class JF_NuevoFormularioPaciente extends javax.swing.JFrame {
     }
     
     private boolean validarLetra(JTextField texto){
-        return verificador.verificar(texto.getText(), TipoValidacion.NO_NULO, TipoValidacion.CADENA_TEXTO_VALIDA);
+        return verificador.validarCampo(texto.getText(), TipoValidacion.NO_NULO, TipoValidacion.CADENA_TEXTO_VALIDA);
     }
     
     private boolean validarNumero(JTextField texto){
-        return verificador.verificar(texto.getText(), TipoValidacion.NO_NULO, TipoValidacion.NUMERICO);
+        return verificador.validarCampo(texto.getText(), TipoValidacion.NO_NULO, TipoValidacion.NUMERICO);
     }
     
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -263,39 +263,8 @@ public class JF_NuevoFormularioPaciente extends javax.swing.JFrame {
         txtTelefono.setText("");
     }//GEN-LAST:event_btnResetearActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JF_NuevoFormularioPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JF_NuevoFormularioPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JF_NuevoFormularioPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JF_NuevoFormularioPaciente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new JF_NuevoFormularioPaciente().setVisible(true);
-        });
-    }
+   
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

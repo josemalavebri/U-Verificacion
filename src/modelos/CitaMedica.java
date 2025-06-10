@@ -1,16 +1,18 @@
 package modelos;
 
-public class CitaMedica {
+public class CitaMedica extends BaseEntity{
     
-    private int id;
     private Paciente paciente;
     private Medico medico;
     private String descripcion;
     private Turno turno;
     
-    public CitaMedica(){}
+    public CitaMedica(){
+        super(0);
+    }
 
     public CitaMedica(Paciente paciente, Medico medico, String descripcion, Turno turno) {
+        super(0);
         this.paciente = paciente;
         this.medico = medico;
         this.descripcion = descripcion;
@@ -18,19 +20,11 @@ public class CitaMedica {
     }
     
     public CitaMedica(int id, Paciente paciente, Medico medico, String descripcion, Turno turno) {
-        this.id = id;
+        super(id);
         this.paciente = paciente;
         this.medico = medico;
         this.descripcion = descripcion;
         this.turno = turno;
-    }
-    
-    public int getId() {
-        return id;
-    }
-    
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Paciente getPaciente() {
@@ -45,7 +39,6 @@ public class CitaMedica {
         return medico;
     }
     
-
     public void setMedico(Medico medico) {
         this.medico = medico;
     }

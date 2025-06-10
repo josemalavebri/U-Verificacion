@@ -1,11 +1,9 @@
-
 package modelos;
 
 public class Medico extends Persona{
     
     private String especialidad;
     private String genero;
-    
     
     public Medico() {
         super(); 
@@ -23,12 +21,10 @@ public class Medico extends Persona{
         return especialidad;
     }
     
-    
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
   
-   
     public String getGenero() {
         return genero;
     }
@@ -36,6 +32,4 @@ public class Medico extends Persona{
     public void setGenero(String genero) {
         this.genero = genero;
     }
-
-    
 }

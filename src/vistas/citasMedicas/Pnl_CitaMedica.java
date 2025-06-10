@@ -1,46 +1,27 @@
 package vistas.citasMedicas;
 
-import java.util.ArrayList;
 import javax.swing.JFrame;
-import javax.swing.JTable;
 import modelos.CitaMedica;
-import utilidades.AccesoController;
-import utilidades.Table.CreateTableFinal;
-import utilidades.ManagerController;
+import utilidades.Table.ControlTable.ControlTable;
+import vistas.IReceptorEntityJFrame;
 
 public class Pnl_CitaMedica extends javax.swing.JPanel {
-
-    private ManagerController managerController;
-    private CreateTableFinal<CitaMedica> createTableFinal;
-
-    public Pnl_CitaMedica(AccesoController accesoController) {
+    
+    private ControlTable controlTable = new ControlTable();
+    
+    public Pnl_CitaMedica() {
         initComponents();
-        managerController = new ManagerController();
-        createTableFinal = new CreateTableFinal(managerController);
-        crearTodaTablaConDatos();
-    }
-    
-    private void crearTodaTablaConDatos(){
-        crearModeloTablaCitaMedica();
-        crearTableConEventoEliminar();
-        crearTableConEventoModificar();
-    }
-    
-    private void crearModeloTablaCitaMedica(){
-        createTableFinal.tableModelTotal(tb_citasMedicas,CitaMedica.class);
-    }
-    
-    private void crearTableConEventoEliminar(){
-        createTableFinal.asignarEventoEliminarTabla(tb_citasMedicas, managerController,CitaMedica.class);
+        llenarDatosTablaInstanciarMetodo();
+        controlTable.registrarTabla(CitaMedica.class, tb_citasMedicas);
     }
     
     
-    private void crearTableConEventoModificar(){
-        createTableFinal.asignarEventoModificar(tb_citasMedicas, CitaMedica.class, citaMedica -> {
-            JF_NuevaCitaMedica panel = new JF_NuevaCitaMedica();
-            panel.setCitaMedicaModificar(citaMedica); 
-        });
+    private void llenarDatosTablaInstanciarMetodo(){
+        controlTable.llenarTablaDatos(CitaMedica.class, tb_citasMedicas);
+        IReceptorEntityJFrame frame = new JF_NuevaCitaMedica();
+        controlTable.eventosTabla(tb_citasMedicas, frame);
     }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -49,7 +30,9 @@ public class Pnl_CitaMedica extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tb_citasMedicas = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btn_nuevaCita = new javax.swing.JButton();
+
+        setPreferredSize(new java.awt.Dimension(808, 425));
 
         jLabel1.setText("Citas Registradas:");
 
@@ -66,10 +49,10 @@ public class Pnl_CitaMedica extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tb_citasMedicas);
 
-        jButton1.setText("Nueva Cita");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_nuevaCita.setText("Nueva Cita");
+        btn_nuevaCita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_nuevaCitaActionPerformed(evt);
             }
         });
 
@@ -80,39 +63,35 @@ public class Pnl_CitaMedica extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_nuevaCita, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 587, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(236, 236, 236))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_nuevaCita, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_nuevaCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevaCitaActionPerformed
        JFrame jframe = new JF_NuevaCitaMedica();
        jframe.setLocationRelativeTo(null);
+       jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        jframe.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_nuevaCitaActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btn_nuevaCita;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tb_citasMedicas;
     // End of variables declaration//GEN-END:variables
-
-    
+ 
 }

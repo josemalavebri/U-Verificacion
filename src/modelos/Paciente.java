@@ -5,8 +5,6 @@ public class Paciente extends Persona {
     private String correo;
     
     public Paciente(){
-        
-        
     }
 
     public Paciente(int cedula, String nombre, String apellido, int edad, String correo, int telefono) {
@@ -27,9 +25,7 @@ public class Paciente extends Persona {
         this.correo = correo;
     }
 
-
-
-    
+ 
 
 
 

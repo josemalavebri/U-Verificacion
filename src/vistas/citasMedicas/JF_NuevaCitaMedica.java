@@ -1,82 +1,78 @@
 package vistas.citasMedicas;
+
+
+
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
+import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
+import modelos.BaseEntity;
 import modelos.CitaMedica;
 import modelos.Medico;
 import modelos.Paciente;
 import modelos.Turno;
-
-import utilidades.AccesoController;
-import utilidades.ManagerController;
-import utilidades.Table.TableColumns;
-import utilidades.Verificador.VerificadorDeFormato;
-
+import utilidades.ComboBox.ComboBoxFiller;
+import utilidades.Controller.ManagerController;
+import utilidades.Table.CreateTable.ConstructorModeloTabla;
+import utilidades.Table.CreateTable.ObjectTableModel;
+import utilidades.Validador.MsgValidacion;
+import utilidades.Validador.Validador;
 import vistas.Factura.JF_Factura;
+import vistas.IReceptorEntityJFrame;
 
-public class JF_NuevaCitaMedica extends javax.swing.JFrame {
+public class JF_NuevaCitaMedica extends javax.swing.JFrame implements IReceptorEntityJFrame<CitaMedica> {
+
     private Turno turnoSeleccionado;
     private ManagerController managerController;
-    private ArrayList<Paciente> listaPacientes;
     private ArrayList<Medico> listaMedicos;
-    private ArrayList<Turno> turnosDisponibles;
+    private ArrayList<Paciente> listaPacientes;
+    private ArrayList<Paciente> listaTurnos;
 
+    private boolean isEdit;
+    
     public JF_NuevaCitaMedica() {
         initComponents();
         inicializarComponentesLogicos();
         cargarDatosComboBox();
         mostrarTurnosEnTabla();
+        eventoClickFila();
+        
     } 
     
+    private void mostrarTurnosEnTabla() {
+        listaTurnos = managerController.get(Turno.class);
+        ConstructorModeloTabla.construirYAsignarModelo(tb_turnos, listaTurnos);
+    }
+     
     private void inicializarComponentesLogicos(){
         turnoSeleccionado = new Turno();
-        managerController = new ManagerController();
-        asignarEventoClickFilaTurno();
+        managerController = ManagerController.getInstance();
     }
     
     private void cargarDatosComboBox(){
         listaMedicos = managerController.get(Medico.class);
         listaPacientes = managerController.get(Paciente.class);
-        llenarComboBoxConDatos(cbx_medicos, listaMedicos);
-        llenarComboBoxConDatos(cbx_paciente, listaPacientes);
+        ComboBoxFiller.llenarComboBox(cbx_medicos, listaMedicos);
+        ComboBoxFiller.llenarComboBox(cbx_paciente, listaPacientes);
     }
     
-    private void mostrarTurnosEnTabla() {
-        turnosDisponibles = managerController.get(Turno.class);
-        Turno turnoModelo = turnosDisponibles.get(1);
-        TableColumns tableColumns = new TableColumns();
-        DefaultTableModel modeloTabla = tableColumns.CrearColumnasModelo(turnoModelo);
-        for (Turno t : turnosDisponibles) {
-            Object[] fila = {t.getId(), t.getFecha(), t.getHora(), t.getMinuto()};
-            modeloTabla.addRow(fila);
-        }
-        tb_turnos.setModel(modeloTabla);
-    }
-     
-    private <T> void llenarComboBoxConDatos(JComboBox<String> comboBox, ArrayList<T> lista) {
-        comboBox.removeAllItems();
-        for (T item : lista) {
-            comboBox.addItem(item.toString());
-        }
-    }
-    
-    private void asignarEventoClickFilaTurno(){
+    private void eventoClickFila(){
         tb_turnos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int filaSeleccionada = tb_turnos.getSelectedRow();
-                if (filaSeleccionada != -1) {
-                    turnoSeleccionado = turnosDisponibles.get(filaSeleccionada);
-                    TextBoxTurno(turnoSeleccionado);
-                }   
+                int fila = tb_turnos.getSelectedRow();
+                if (fila != -1) { // -1 significa que no hay fila seleccionada
+                    ObjectTableModel modeloTablaTurno = (ObjectTableModel) tb_turnos.getModel();
+                    Turno turno = (Turno )modeloTablaTurno.getObjetoAt(fila);
+                    txt_turnoSeleccionado.setText(turno.getFecha() + " - " + turno.getHora());
+                    turnoSeleccionado = turno;
+                }
             }
         });
     }
-
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -140,7 +136,6 @@ public class JF_NuevaCitaMedica extends javax.swing.JFrame {
 
         cbx_medicos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        txt_turnoSeleccionado.setText("Turno Seleccionado");
         txt_turnoSeleccionado.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,44 +210,59 @@ public class JF_NuevaCitaMedica extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void btn_resetearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_resetearActionPerformed
-        cbx_paciente.setSelectedIndex(0);
-        cbx_medicos.setSelectedIndex(0);
+        cbx_paciente.setSelectedIndex(-1);
+        cbx_medicos.setSelectedIndex(-1);
         txta_descripcion.setText("");
         txt_turnoSeleccionado.setText("Turno Seleccionado");
     }//GEN-LAST:event_btn_resetearActionPerformed
 
     private void btn_guardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardar1ActionPerformed
+        if (isEdit) {
+            actualizarCitaMedica();
+        } else {
+            guardarCitaMedica();
+        }
+    }//GEN-LAST:event_btn_guardar1ActionPerformed
+    
+    private void actualizarCitaMedica(){
+        CitaMedica citaMedica = crearCitaMedicaFormulario();
+        if(managerController.post(citaMedica)){
+            JOptionPane.showMessageDialog(null, "CitaMedica actualizada con exito");
+
+        }else{
+            JOptionPane.showMessageDialog(null, "CitaMedica no fue actualizada con exito");
+        }
+    }
+    
+    private void guardarCitaMedica(){
         if(!verificarCampos()){
             return;
         }
         
         CitaMedica citaMedica = crearCitaMedicaFormulario();
         boolean guadadoExitoso = managerController.post(citaMedica);
-        generarFactura(citaMedica);
         
         if (guadadoExitoso){
             JOptionPane.showMessageDialog(null, "Cita Medica guadada con exito");
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar la cita médica");
         }
-    }//GEN-LAST:event_btn_guardar1ActionPerformed
-    
-    private boolean verificarCampos(){
-        if(! VerificadorDeFormato.verificarCampoTexto(cbx_medicos.getSelectedItem(), "Campo Medico Vacio o no valido")) 
-            return false;
-        
-        if(! VerificadorDeFormato.verificarCampoTexto(cbx_paciente.getSelectedItem(), "Campo Paciente Vacio o no valido")) 
-            return false;
-        
-        if(! VerificadorDeFormato.verificarCampoTexto(txta_descripcion.getText(), "Descripcion no valida")) 
-            return false;
-        
-        return true;
     }
     
+    
+    private boolean verificarCampos(){
+        Validador validador = new Validador();
+        validador.putCampo(txta_descripcion.getText(), MsgValidacion.CAMPO_DESCRIPCION);
+        validador.putCampo(txt_turnoSeleccionado.getText(), MsgValidacion.CAMPO_TURNO);
+        return validador.validarCamposGuardados();
+    }
+    
+    
     private CitaMedica crearCitaMedicaFormulario(){
-        Medico medico =  (Medico) cbx_medicos.getSelectedItem();
-        Paciente paciente = (Paciente) cbx_paciente.getSelectedItem();
+        int indexSeleccionadoMedico = cbx_medicos.getSelectedIndex();
+        int indexSeleccionadoPaciente = cbx_paciente.getSelectedIndex();
+        Medico medico = listaMedicos.get(indexSeleccionadoMedico);
+        Paciente paciente = listaPacientes.get(indexSeleccionadoPaciente);
         String descripcion = txta_descripcion.getText();
         CitaMedica citaMedica = new CitaMedica(paciente, medico, descripcion, turnoSeleccionado);
         return citaMedica;
@@ -264,21 +274,29 @@ public class JF_NuevaCitaMedica extends javax.swing.JFrame {
         factura.setLocationRelativeTo(null);
         factura.setVisible(true);
     }
-    
-    private void TextBoxTurno(Turno turnoSeleccionadoActual){
-        txt_turnoSeleccionado.setText(turnoSeleccionadoActual.getFecha()+" - "+turnoSeleccionadoActual.getHora());
-    }
-    
-    public void setCitaMedicaModificar(CitaMedica citaMedica){
-        llenarFormularioCitaMedica(citaMedica);
-    }
-    
-    private void llenarFormularioCitaMedica(CitaMedica citaMedica){
-        cbx_paciente.setSelectedIndex(0);
-        cbx_medicos.setSelectedIndex(0);
-        txta_descripcion.setText(citaMedica.getDescripcion());
-    }
+  
+    @Override
+    public void setEntidad(CitaMedica entidad) {
+        int idMedico = entidad.getMedico().getId();
+        int idPaciente = entidad.getPaciente().getId();
+        int indiceMedico = obtenerIndicePorId(idMedico, listaMedicos);
+        int indicePaciente = obtenerIndicePorId(idPaciente, listaPacientes);
 
+        cbx_medicos.setSelectedIndex(indiceMedico);
+        cbx_paciente.setSelectedIndex(indicePaciente);
+        txta_descripcion.setText(entidad.getDescripcion());
+        isEdit = true;
+        btn_guardar1.setText("Actualizar");
+    }
+    
+    private <T extends BaseEntity> int obtenerIndicePorId(int idEntidad, List<T> entidadesLista){
+        for (int i = 0; i < entidadesLista.size(); i++) {
+             if(entidadesLista.get(i).getId() == idEntidad)
+                return i;
+        }
+        return -1;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_guardar1;
     private javax.swing.JButton btn_resetear;
@@ -294,4 +312,7 @@ public class JF_NuevaCitaMedica extends javax.swing.JFrame {
     private javax.swing.JTextField txt_turnoSeleccionado;
     private javax.swing.JTextArea txta_descripcion;
     // End of variables declaration//GEN-END:variables
+
+    
+   
 }

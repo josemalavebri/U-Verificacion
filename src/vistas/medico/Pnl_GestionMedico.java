@@ -1,36 +1,24 @@
 package vistas.medico;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import javax.swing.JFrame;
 import modelos.Medico;
-import utilidades.AccesoController;
-import utilidades.Table.ButtonTable.ButtonEditor;
-import utilidades.Table.ButtonTable.ButtonRenderer;
+import utilidades.Controller.ManagerController;
+import utilidades.Table.RefreshTable.RefreshTable;
+import utilidades.Table.CreateTable.ConstructorModeloTabla;
 
-/**
- *
- * @author conta
- */
-    public class Pnl_GestionMedico extends javax.swing.JPanel {
-    private static String MODIFICAR = "Modificar";
-    private static String ELIMINAR = "Eliminar";
-    private AccesoController accesoController;
-    private ArrayList<Medico> datosMedico;
-    private JF_FormularioMedico formularioMedico;
 
-    /**
-     * Creates new form Pnl_GestionMedico
-     */
+public class Pnl_GestionMedico extends javax.swing.JPanel {
+   
+    private final ManagerController managerController;
+    private final RefreshTable table;
+    
     public Pnl_GestionMedico() {
+        managerController = ManagerController.getInstance();
         initComponents();
-        inicializarDatos();
-        TablaMedicoLlenado();
+        llenarDatosTabla();
+        table = RefreshTable.getInstance();
+        table.suscribir("tb_medico", tb_Medico);
     }
 
     @SuppressWarnings("unchecked")
@@ -46,7 +34,7 @@ import utilidades.Table.ButtonTable.ButtonRenderer;
         jScrollPane2 = new javax.swing.JScrollPane();
         tb_Medico = new javax.swing.JTable();
 
-        setPreferredSize(new java.awt.Dimension(600, 400));
+        setPreferredSize(new java.awt.Dimension(808, 425));
         setRequestFocusEnabled(false);
 
         btn_Buscar.setText("Buscar");
@@ -54,6 +42,11 @@ import utilidades.Table.ButtonTable.ButtonRenderer;
         btn_Resetear.setText("Resetear");
 
         btn_Nuevo.setText("Nuevo");
+        btn_Nuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_NuevoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Medicos Agregados");
 
@@ -77,199 +70,58 @@ import utilidades.Table.ButtonTable.ButtonRenderer;
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(txt_Cedula, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
+                        .addGap(30, 30, 30)
                         .addComponent(btn_Buscar)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_Resetear))
-                    .addComponent(jLabel2)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btn_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(119, 119, 119)))
-                .addContainerGap(141, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                        .addComponent(btn_Resetear)
+                        .addContainerGap(168, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 758, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
                     .addComponent(txt_Cedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_Buscar)
-                    .addComponent(btn_Resetear)
-                    .addComponent(jLabel1))
-                .addGap(31, 31, 31)
-                .addComponent(btn_Nuevo)
-                .addGap(16, 16, 16)
+                    .addComponent(btn_Resetear))
+                .addGap(34, 34, 34)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    private void inicializarDatos(){
-        accesoController = new AccesoController();
-        datosMedico = new ArrayList<>();
-    }
-    
-    private JF_FormularioMedico abrirFormulario(){
-        formularioMedico = new JF_FormularioMedico(this);
+
+    private void btn_NuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NuevoActionPerformed
+        JF_FormularioMedico formularioMedico = new JF_FormularioMedico();
         formularioMedico.setLocationRelativeTo(null);
+        formularioMedico.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         formularioMedico.setVisible(true);
-        return formularioMedico;
-    }
-    
-    private void btn_resetearActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
-        txt_Cedula.setText("");
-        TablaMedicoLlenado();
-    }                                            
-
-    private void btn_nuevoActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        abrirFormulario();
-        
-    }                                         
-
-    private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        String campoCedulaTexto = txt_Cedula.getText().toLowerCase().trim();
-        datosMedico = accesoController.medicoController().get();
-        DefaultTableModel modelo = (DefaultTableModel) tb_Medico.getModel();
-        modelo.setRowCount(0);
-        for (Medico medicoTemporal : datosMedico){
-            boolean isCedula = campoCedulaTexto.equals(String.valueOf(medicoTemporal.getCedula()));
-            if(isCedula){
-                Object[] nuevaFila={
-                    medicoTemporal.getId(),
-                    medicoTemporal.getCedula(),
-                    medicoTemporal.getEdad(),
-                    medicoTemporal.getNombre(),
-                    medicoTemporal.getApellido(),
-                    medicoTemporal.getEspecialidad(),
-                    medicoTemporal.getGenero(),
-                    medicoTemporal.getTelefono(),
-                    MODIFICAR,
-                    ELIMINAR
-                };
-                modelo.addRow(nuevaFila);
-                break;
-            }
-        }
-    }                                          
-
-    public void TablaMedicoLlenado(){
-        datosMedico = accesoController.medicoController().get();
-
-        //modelo = CrearColumnasModeloPersonalizado(Medico.get(1), campos);
-        //String[] campos = {"Id","Cedula","edad","Nombre","Apellido","Especialidad","Genero","Telefono"};
-
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Id");
-        modelo.addColumn("Cedula");
-        modelo.addColumn("Edad");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Apellido");
-        modelo.addColumn("Especialidad");
-        modelo.addColumn("Genero");
-        modelo.addColumn("Telefono");
-        
-        modelo.addColumn(MODIFICAR);
-        modelo.addColumn(ELIMINAR);
-        for (Medico p : datosMedico){
-            Object[] fila = {p.getId(), p.getCedula(), p.getEdad(), p.getNombre(), p.getApellido(), p.getEspecialidad(), p.getGenero(), p.getTelefono(), MODIFICAR, ELIMINAR};
-            modelo.addRow(fila);
-        }
-        
-        tb_Medico.setModel(modelo);
-        
-        tb_Medico.getColumn("Modificar").setCellRenderer(new ButtonRenderer());
-        tb_Medico.getColumn("Modificar").setCellEditor(new ButtonEditor(new JCheckBox(), MODIFICAR, eventoModificar()));
-
-        tb_Medico.getColumn("Eliminar").setCellRenderer(new ButtonRenderer());
-        tb_Medico.getColumn("Eliminar").setCellEditor(new ButtonEditor(new JCheckBox(), ELIMINAR, eventoEliminar()));
-    }
-    
-    private ActionListener eventoEliminar(){
-            ActionListener eliminarAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = tb_Medico.getSelectedRow();
-
-                int idTablaMedico = (int) tb_Medico.getValueAt(filaSeleccionada, 0);
-
-                boolean eliminado = accesoController.medicoController().remove(idTablaMedico);
-                
-                if(eliminado){
-                    JOptionPane.showMessageDialog(null, "Medico eliminado: " + idTablaMedico);
-                    TablaMedicoLlenado();
-                }
-            }
-        };
-        return eliminarAction;
-    }
-    
-    private ActionListener eventoModificar(){
-        ActionListener modificarAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = tb_Medico.getSelectedRow();
-                if (filaSeleccionada >= 0) {
-                    String idTexto = tb_Medico.getValueAt(filaSeleccionada, 0).toString(); // columna 0 = ID
-                    int id = Integer.parseInt(idTexto);
-                    Medico medico = buscarMedico(id, tb_Medico);
-                    JF_FormularioMedico formularioModificar = abrirFormulario();
-                    formularioModificar.setMedico(medico);
-                    accesoController.medicoController().put(medico);
-                    TablaMedicoLlenado();
-                }
-            }
-        };
-        return modificarAction;
-    }
+    }//GEN-LAST:event_btn_NuevoActionPerformed
     
     
-    private Medico buscarMedico(int id, JTable tabla){
-        String especialidad = null; 
-        String genero = null;
-        for(Medico medico: datosMedico){ 
-            if(id == medico.getId()){
-                String cedulaTexto = tb_Medico.getValueAt(tabla.getSelectedRow(), 1).toString();
-                int cedula = Integer.parseInt(cedulaTexto);
-                String nombre = tb_Medico.getValueAt(tabla.getSelectedRow(), 2).toString();
-                String apellido = tb_Medico.getValueAt(tabla.getSelectedRow(), 3).toString();
-                datosMedico = accesoController.medicoController().get();
-                int edad = medico.getEdad();
-                int telefono = medico.getTelefono();
-                return medico = new Medico(id,cedula,edad,nombre,apellido,especialidad,genero,telefono);
-            }
-        }
-        return null;
+    private void llenarDatosTabla(){
+        List<Medico> listaMedicos = managerController.get(Medico.class);
+        ConstructorModeloTabla.construirYAsignarModelo(tb_Medico, listaMedicos);
+        ConstructorModeloTabla.AgregarEventosEditarYEliminar(tb_Medico, new JF_FormularioMedico());
     }
+   
     
-    public static DefaultTableModel CrearColumnasModeloPersonalizado(Object objeto, String[] camposDeseados){
-        Field[] campos = objeto.getClass().getDeclaredFields();
-        ArrayList<String> columnas = new ArrayList<>();
-
-        for (String campoDeseado : camposDeseados) {
-            for (Field campo : campos) {
-                if (campo.getName().equals(campoDeseado)) {
-                    columnas.add(campoDeseado);
-                    break;
-                }
-            }
-        }
-        String[] nombresDeColumnas = columnas.toArray(new String[0]);
-        return new DefaultTableModel(nombresDeColumnas, 0);
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Buscar;
     private javax.swing.JToggleButton btn_Nuevo;

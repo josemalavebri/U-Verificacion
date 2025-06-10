@@ -126,6 +126,7 @@
         </Property>
       </Properties>
       <AuxValues>
+        <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="JF_NuevaCitaMedica_cbx_paciente"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
@@ -155,6 +156,9 @@
               </Table>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -218,7 +222,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txt_turnoSeleccionado">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Turno Seleccionado"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>

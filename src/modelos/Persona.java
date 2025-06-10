@@ -1,10 +1,8 @@
 
 package modelos;
 
-
-public class Persona {
+public abstract class Persona extends BaseEntity{
     
-    protected int id;
     protected int cedula;
     protected int edad;
     protected String nombre;
@@ -12,7 +10,7 @@ public class Persona {
     protected int telefono;
     
     public Persona() {
-        this.id = 0;
+        super(0);
         this.cedula = 0;
         this.edad = 0;
         this.nombre = "";
@@ -21,7 +19,7 @@ public class Persona {
     }
 
     public Persona(int id, int cedula, int edad,String nombre, String apellido, int telefono) {
-        this.id = id;
+        super(id);
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -29,13 +27,6 @@ public class Persona {
         this.telefono = telefono;
     }
     
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getCedula() {
         return cedula;

@@ -11,15 +11,4 @@ public class FacturaController extends GeneralController<Factura>{
         super(repository);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

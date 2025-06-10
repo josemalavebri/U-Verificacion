@@ -10,10 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import modelos.Paciente;
 
 /**
  *
@@ -51,5 +48,9 @@ public class ButtonEditor extends DefaultCellEditor {
     @Override
     public Object getCellEditorValue() {
         return action;
+    }
+    
+    public int getRow() {
+        return row;
     }
 }

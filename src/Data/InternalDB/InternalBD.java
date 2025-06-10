@@ -2,6 +2,7 @@ package Data.InternalDB;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import modelos.*;
 
 
@@ -115,6 +116,7 @@ public class InternalBD {
    
     public  boolean addMedico(Medico m){
         try{
+            int id = generateId(listaMedicos);
             return listaMedicos.add(m);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -168,9 +170,12 @@ public class InternalBD {
         }
         return new CitaMedica(); 
     }
+    
 
     public boolean addCitaMedica(CitaMedica cita) {
         try {
+            int id = generateId(listaCitasMedicas);
+            cita.setId(id);
             return listaCitasMedicas.add(cita);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -284,6 +289,11 @@ public class InternalBD {
             System.out.println(e.getMessage());
         }
         return false;
+    }
+    
+    private <T extends BaseEntity> int generateId(ArrayList<T> lista){
+        BaseEntity entityInList = lista.get(lista.size()-1);
+        return entityInList.getId()+1;
     }
 }
 

@@ -10,6 +10,6 @@ public class MedicoController extends GeneralController<Medico>{
     public MedicoController(IRepository repository){
         super(repository);
     }
-    
+
     
 }

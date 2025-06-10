@@ -2,34 +2,23 @@
 package modelos;
 
 
-public class Factura {
+public class Factura extends BaseEntity{
 
-    private int Id;
     private int numeroFactura;
     private CitaMedica citaMedica;
     private double TotalPagar;
     
     public Factura(){
-        
+        super(0);
     }
-
     
-    public Factura(int Id, int numeroFactura, CitaMedica citaMedica, double TotalPagar) {
-        this.Id = Id;
+    public Factura(int id, int numeroFactura, CitaMedica citaMedica, double TotalPagar) {
+        super(id);
         this.numeroFactura = numeroFactura;
         this.citaMedica = citaMedica;
         this.TotalPagar = TotalPagar;
     }
     
-    
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int Id) {
-        this.Id = Id;
-    }
-
     public int getNumeroFactura() {
         return numeroFactura;
     }
@@ -53,9 +42,4 @@ public class Factura {
     public void setTotalPagar(double TotalPagar) {
         this.TotalPagar = TotalPagar;
     }
-
-    
-    
-    
-    
 }

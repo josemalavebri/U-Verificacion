@@ -1,39 +1,28 @@
 package modelos;
 
 
-public class Turno {
+public class Turno extends BaseEntity{
 
-    private int id;
     private String fecha;
     private String hora;
     private String minuto;
     
-    public Turno(){  
+    public Turno(){
+        super(0);
     }
     
     public Turno(String fecha, String hora, String minuto) {
-        this.id = id;
+        super(0);
         this.fecha = fecha;
         this.hora = hora;
         this.minuto = minuto;
     }
     
     public Turno(int id, String fecha, String hora, String minuto) {
-        this.id = id;
+        super(id);
         this.fecha = fecha;
         this.hora = hora;
         this.minuto = minuto;
-    }
-    
-    
-
-      
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFecha() {
@@ -59,4 +48,11 @@ public class Turno {
      public void setMinuto(String minuto) {
         this.minuto = minuto;
     }
+
+    @Override
+    public String toString() {
+        return fecha + " - " + hora + ":" + minuto;
+    }
+     
+     
 }
